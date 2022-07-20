@@ -1,7 +1,7 @@
 clc; close all; clear;
 
-l=1;
-p=1;
+l=-1;
+p=0;
 sigma=1;
 alpha=30 *(pi/180);
 beta0=1e-2/10e-4;
