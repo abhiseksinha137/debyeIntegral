@@ -1,14 +1,11 @@
-clc; close all; clear;
+function []=funcCalc(l,p,sigma,N, savePath)
 
-l=1;
-p=0;
-sigma=1;
+
 alpha=30 *(pi/180);
 beta0=1e-2/10e-4;
 lda0=800e-9;
 k=2*pi/lda0;
 
-N=100; % No of grid points
 
 phis=linspace(0,2*pi,N);
 zs=0;
@@ -115,4 +112,4 @@ colormap jet
 set(gcf, 'position', [6         448        1355         214])
 
 %% Save
-exportgraphics(fig, [fig.Name, '.png'], 'Resolution',150)
+exportgraphics(fig, [savePath, fig.Name, '.png'], 'Resolution',150)
