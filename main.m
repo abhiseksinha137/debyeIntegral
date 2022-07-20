@@ -1,7 +1,7 @@
 clc; close all; clear;
 %% Using p=0
 l=1;
-sigma=0;
+sigma=1;
 alpha=30 *(pi/180);
 beta0=1e-2/10e-4;
 lda0=800e-9;
