@@ -1,6 +1,7 @@
 clc; close all; clear;
-%% Using p=0
+
 l=1;
+p=1;
 sigma=1;
 alpha=30 *(pi/180);
 beta0=1e-2/10e-4;
@@ -33,6 +34,7 @@ Ez=@(theta,phi) (er(phi) -1i*sigma*ep(phi)) .* (sin(theta))     + ...
 w0=@(theta) (sqrt(2)*beta0*sin(theta)/sin(alpha)).^abs(l) .*exp(-(beta0*sin(theta)/sin(alpha)).^2);
 
 
+
 integrandx= @(theta,phi, rhos,phis) w0(theta).* exp(1i*k*(zs.*cos(theta)+rhos.*sin(theta).*cos(phi-phis))).* Ex(theta,phi) .*sin(theta).*sqrt(cos(theta)) ;
 integrandy= @(theta,phi, rhos,phis) w0(theta).* exp(1i*k*(zs.*cos(theta)+rhos.*sin(theta).*cos(phi-phis))).* Ey(theta,phi) .*sin(theta).*sqrt(cos(theta)) ;
 integrandz= @(theta,phi, rhos,phis) w0(theta).* exp(1i*k*(zs.*cos(theta)+rhos.*sin(theta).*cos(phi-phis))).* Ez(theta,phi) .*sin(theta).*sqrt(cos(theta)) ;
@@ -44,17 +46,27 @@ phi=linspace(0,2*pi,N);
 [RHOS, PHIS]=meshgrid(rhos, phis);
 
 
-
-
-
-for i=1:length(rhos)
-    for j=1:length(phis)
-        esx(j,i)=sum(sum(integrandx(THETA,PHI, rhos(i),phis(j))));
-        esy(j,i)=sum(sum(integrandy(THETA,PHI, rhos(i),phis(j))));
-        esz(j,i)=sum(sum(integrandz(THETA,PHI, rhos(i),phis(j))));
-
+if p==0
+    for i=1:length(rhos)
+        for j=1:length(phis)
+            esx(j,i)=sum(sum(integrandx(THETA,PHI, rhos(i),phis(j))));
+            esy(j,i)=sum(sum(integrandy(THETA,PHI, rhos(i),phis(j))));
+            esz(j,i)=sum(sum(integrandz(THETA,PHI, rhos(i),phis(j))));
+    
+        end
+    end
+else
+    Lval=L(l,p, 2*(beta0*sin(THETA)/sin(alpha)).^2);
+    for i=1:length(rhos)
+        for j=1:length(phis)
+            esx(j,i)=sum(sum(Lval.*integrandx(THETA,PHI, rhos(i),phis(j))));
+            esy(j,i)=sum(sum(Lval.*integrandy(THETA,PHI, rhos(i),phis(j))));
+            esz(j,i)=sum(sum(Lval.*integrandz(THETA,PHI, rhos(i),phis(j))));
+    
+        end
     end
 end
+
 % s=size(RHOS);
 % rq=reshape(RHOS, [s(1)*s(2),1]);
 % pq=reshape(PHIS, [s(1)*s(2),1]);
@@ -70,7 +82,7 @@ normE=sqrt(abs(esx).^2 + abs(esy).^2 + abs(esz).^2);
 
 %% Plot
 fig=figure();
-fig.Name=['l=', num2str(l), ', sigma=', num2str(sigma)];
+fig.Name=['l=', num2str(l), ' p=', num2str(p) ', sigma=', num2str(sigma)];
 subplot(1,4,1)
 surf(X,Y, abs(esx), 'LineStyle','None')
 view(0,90)
