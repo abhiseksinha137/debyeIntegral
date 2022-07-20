@@ -103,4 +103,4 @@ colormap jet
 set(gcf, 'position', [6         448        1355         214])
 
 %% Save
-exportgraphics(fig, [fig.Name, '.png'], 'Resolution',300)
+exportgraphics(fig, [fig.Name, '.png'], 'Resolution',150)
